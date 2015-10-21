@@ -31,7 +31,10 @@ include_directories(${catkin_INCLUDE_DIRS})
 SET(CMAKE_CXX_FLAGS  "${CMAKE_CXX_FLAGS} -lrt -pthread")
 
 # build library
-add_library(ublox_gps src/gps.cpp)
+add_library(ublox_gps src/gps.cpp
+                      include/ublox_gps/gps.h
+                      include/ublox_gps/worker.h
+                      include/ublox_gps/async_worker.h)
 
 # fix msg compile order bug
 add_dependencies(ublox_gps ${catkin_EXPORTED_TARGETS})

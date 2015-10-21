@@ -167,6 +167,42 @@ struct Serializer<ublox_msgs::RxmRAW_<ContainerAllocator> >
 };
 
 template <typename ContainerAllocator>
+struct Serializer<ublox_msgs::RxmRAWX_<ContainerAllocator> >
+{
+  static void read(const uint8_t *data, uint32_t count, typename boost::call_traits<ublox_msgs::RxmRAWX_<ContainerAllocator> >::reference m)
+  {
+    ros::serialization::IStream stream(const_cast<uint8_t *>(data), count);
+    stream.next(m.rcvTow);
+    stream.next(m.week);
+    stream.next(m.leapS);
+    stream.next(m.numMeas);
+    stream.next(m.recStat);
+    stream.next(m.reserved1);
+    m.sv.resize(m.numMeas);
+    for(size_t i = 0; i < m.sv.size(); ++i)
+      ros::serialization::deserialize(stream, m.sv[i]);
+  }
+
+  static uint32_t serializedLength(typename boost::call_traits<ublox_msgs::RxmRAWX_<ContainerAllocator> >::param_type m)
+  {
+    return 16 + 32 * m.numMeas;
+  }
+
+  static void write(uint8_t* data, uint32_t size, typename boost::call_traits<ublox_msgs::RxmRAWX_<ContainerAllocator> >::param_type m)
+  {
+    ros::serialization::OStream stream(data, size);
+    stream.next(m.rcvTow);
+    stream.next(m.week);
+    stream.next(m.leapS);
+    stream.next(static_cast<typename ublox_msgs::RxmRAWX_<ContainerAllocator>::_numMeas_type>(m.sv.size()));
+    stream.next(m.recStat);
+    stream.next(m.reserved1);
+    for(size_t i = 0; i < m.sv.size(); ++i)
+      ros::serialization::serialize(stream, m.sv[i]);
+  }
+};
+
+template <typename ContainerAllocator>
 struct Serializer<ublox_msgs::RxmSVSI_<ContainerAllocator> >
 {
   static void read(const uint8_t *data, uint32_t count, typename boost::call_traits<ublox_msgs::RxmSVSI_<ContainerAllocator> >::reference m)

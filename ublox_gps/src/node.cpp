@@ -175,6 +175,12 @@ void publishRxmRAW(const ublox_msgs::RxmRAW& m)
   publisher.publish(m);
 }
 
+void publishRxmRAWX(const ublox_msgs::RxmRAWX& m)
+{
+  static ros::Publisher publisher = nh->advertise<ublox_msgs::RxmRAWX>("rxmrawx", kROSQueueSize);
+  publisher.publish(m);
+}
+
 void publishRxmSFRB(const ublox_msgs::RxmSFRB& m)
 {
   static ros::Publisher publisher = nh->advertise<ublox_msgs::RxmSFRB>("rxmsfrb", kROSQueueSize);
@@ -489,7 +495,10 @@ int main(int argc, char **argv) {
     param.param("nav_clk", enabled["nav_clk"], enabled["all"]);
     if (enabled["nav_clk"]) gps.subscribe<ublox_msgs::NavCLOCK>(&publishNavCLK, 1);
     param.param("rxm_raw", enabled["rxm_raw"], enabled["all"] || enabled["rxm"]);
-    if (enabled["rxm_raw"]) gps.subscribe<ublox_msgs::RxmRAW>(&publishRxmRAW, 1);
+    if (enabled["rxm_raw"] && ublox_version < 8)
+      gps.subscribe<ublox_msgs::RxmRAW>(&publishRxmRAW, 1);
+    else if (enabled["rxm_raw"])
+      gps.subscribe<ublox_msgs::RxmRAWX>(&publishRxmRAWX, 1);
     param.param("rxm_sfrb", enabled["rxm_sfrb"], enabled["all"] || enabled["rxm"]);
     if (enabled["rxm_sfrb"]) gps.subscribe<ublox_msgs::RxmSFRB>(&publishRxmSFRB, 1);
     param.param("nav_posllh", enabled["nav_posllh"], true);

@@ -90,3 +90,5 @@ gen/*
 *.out
 *.app
 
+# QTCREATOR FILES
+CMakeLists.txt.user
